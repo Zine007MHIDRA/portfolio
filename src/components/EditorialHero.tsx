@@ -36,7 +36,7 @@ export function EditorialHero({
     const section = sectionRef.current;
     if (!video || !section) return;
 
-    if (isAmbientPaused || prefersReducedMotion) {
+    if (isAmbientPaused || (prefersReducedMotion && !userEnabledMotion)) {
       video.pause();
       return;
     }
@@ -55,7 +55,7 @@ export function EditorialHero({
 
     observer.observe(section);
     return () => observer.disconnect();
-  }, [isAmbientPaused, prefersReducedMotion]);
+  }, [isAmbientPaused, prefersReducedMotion, userEnabledMotion]);
 
   return (
     <section
@@ -65,7 +65,6 @@ export function EditorialHero({
       className="mx-auto max-w-[1440px] px-4 pt-5 pb-10 sm:px-6 sm:pt-7 lg:px-10 lg:pb-16"
     >
       <div className="relative overflow-hidden border border-[var(--line)] bg-[var(--surface)]">
-        {/* Background architectural layer with explicit dimensions and high-priority eager paint (R-40). */}
         <div className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden="true">
           {hasHeroVideo ? (
             <video
@@ -98,7 +97,7 @@ export function EditorialHero({
             <div className="h-full w-full bg-[var(--surface)]" />
           )}
 
-          {/* Directional scrim guarantees WCAG AA contrast behind all typography over every pixel (R-25). */}
+          {/* Directional scrim guarantees WCAG AA contrast over every pixel behind text (R-25). */}
           <div
             className="absolute inset-0"
             style={{
@@ -115,7 +114,6 @@ export function EditorialHero({
           />
         </div>
 
-        {/* Top editorial folio strip */}
         <div className="relative z-10 flex flex-wrap items-center justify-between gap-3 border-b border-[var(--line)] bg-[rgba(16,17,15,0.82)] px-4 py-3.5 sm:px-7 lg:px-10">
           <p className="font-mono-editorial text-[11px] uppercase tracking-[0.16em] text-[var(--ink-muted)]">
             <span className="text-[var(--accent)]" aria-hidden="true">
@@ -128,8 +126,7 @@ export function EditorialHero({
           </p>
         </div>
 
-        {/* Main hero composition */}
-        <div className="relative z-10 flex flex-col justify-between px-4 pt-10 pb-8 sm:px-7 sm:pt-14 sm:pb-10 lg:min-h-[680px] lg:px-10 lg:pt-16 lg:pb-12">
+        <div className="relative z-10 flex flex-col justify-between px-4 pt-10 pb-8 sm:px-7 sm:pt-14 sm:pb-10 lg:min-h-[660px] lg:px-10 lg:pt-16 lg:pb-12">
           <div>
             <p className="font-mono-editorial text-[11px] sm:text-xs uppercase tracking-[0.16em] text-[var(--accent)]">
               {portfolioConfig.stackLabel}
@@ -137,14 +134,14 @@ export function EditorialHero({
 
             <h1
               id="hero-heading"
-              className="font-display mt-4 uppercase leading-[0.88] tracking-[0.01em] text-[clamp(3.75rem,13vw,9.25rem)]"
+              className="font-display mt-5 uppercase leading-[0.88] text-[clamp(3.15rem,9.2vw,7.4rem)]"
             >
               {portfolioConfig.heroTitleLines.map((line) => (
-                <span key={line} className="block text-[var(--ink)]">
+                <span key={line} className="block font-bold text-[var(--ink)]">
                   {line}
                 </span>
               ))}
-              <span className="display-stroke block pl-4 sm:pl-12 lg:pl-16">
+              <span className="display-stroke block font-normal pl-4 sm:pl-12 lg:pl-16">
                 {portfolioConfig.heroOutlineLine}
               </span>
             </h1>
@@ -168,10 +165,9 @@ export function EditorialHero({
           </div>
         </div>
 
-        {/* Bottom status bar with explicit motion pause control (R-39) */}
         <div className="relative z-10 flex flex-wrap items-center justify-between gap-3 border-t border-[var(--line)] bg-[rgba(16,17,15,0.72)] px-4 py-3 sm:px-7 lg:px-10">
           <p className="font-mono-editorial text-[11px] uppercase tracking-[0.14em] text-[var(--ink-muted)]">
-            {publicRepos} public repositories · {liveDeployments} live deployments
+            Built from public work · {publicRepos} repositories · {liveDeployments} live
           </p>
 
           <div className="flex items-center gap-4">
@@ -189,7 +185,7 @@ export function EditorialHero({
               href="#selected-work"
               className="min-h-[44px] inline-flex items-center font-mono-editorial text-[11px] uppercase tracking-[0.14em] text-[var(--ink-muted)] hover:text-[var(--accent)] transition-colors"
             >
-              Scroll to inspect
+              Scroll to explore
             </a>
           </div>
         </div>

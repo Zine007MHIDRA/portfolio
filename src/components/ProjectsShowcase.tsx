@@ -3,7 +3,6 @@
 import { useMemo, useRef, useState, type KeyboardEvent } from "react";
 import type { PortfolioProject } from "@/lib/github";
 import { ProjectLedger } from "@/components/ProjectLedger";
-import { RollingPill } from "@/components/RollingPill";
 
 interface ProjectsShowcaseProps {
   displayName: string;
@@ -53,7 +52,12 @@ export function ProjectsShowcase({
   ];
 
   const handleTabKeyDown = (event: KeyboardEvent<HTMLButtonElement>, index: number) => {
-    if (event.key !== "ArrowRight" && event.key !== "ArrowLeft" && event.key !== "Home" && event.key !== "End") {
+    if (
+      event.key !== "ArrowRight" &&
+      event.key !== "ArrowLeft" &&
+      event.key !== "Home" &&
+      event.key !== "End"
+    ) {
       return;
     }
     event.preventDefault();
@@ -71,48 +75,44 @@ export function ProjectsShowcase({
       <ProjectLedger
         id="selected-work"
         sectionLabel="Selected Work"
-        sectionIndex="02 / 04 · FEATURED BUILDS"
+        totalFeaturedCount={featuredProjects.length + additionalProjects.length}
         projects={featuredProjects}
-        startNumber={1}
       />
 
-      {/* Editorial break between flagship builds and full public archive */}
+      {/* Open negative-space editorial statement matching the reference cadence */}
       <section
         aria-labelledby="archive-heading"
-        className="mx-auto max-w-[1440px] px-4 py-12 sm:px-6 sm:py-16 lg:px-10 lg:py-20"
+        className="mx-auto max-w-[1440px] px-4 py-16 sm:px-6 sm:py-24 lg:px-10 lg:py-32"
       >
-        <div className="border-y border-[var(--line)] bg-[var(--surface)] px-5 py-10 sm:px-8 sm:py-14 lg:px-12 lg:py-16">
-          <div className="grid gap-8 lg:grid-cols-12 lg:items-end">
-            <div className="lg:col-span-7">
-              <p className="font-mono-editorial text-[11px] uppercase tracking-[0.16em] text-[var(--accent)]">
-                PUBLIC ARCHIVE
-              </p>
-              <h2
-                id="archive-heading"
-                className="font-display mt-3 text-[clamp(3rem,8vw,6rem)] uppercase leading-[0.9] text-[var(--ink)]"
-              >
-                PUBLIC REPOSITORIES
-              </h2>
-              <p className="mt-4 max-w-xl text-sm sm:text-base leading-relaxed text-[var(--ink-muted)]">
-                {displayName} maintains {publicRepos} public repositories on GitHub, including{" "}
-                {liveDeployments} live deployed applications across TypeScript and Python.
-              </p>
-            </div>
+        <div className="lg:pl-[28%] max-w-4xl">
+          <p className="font-mono-editorial text-[11px] uppercase tracking-[0.16em] text-[var(--accent)]">
+            PUBLIC REPOSITORIES
+          </p>
 
-            <div className="lg:col-span-5 lg:flex lg:flex-col lg:items-end lg:justify-end gap-5">
-              <RollingPill
-                href={`${profileUrl}?tab=repositories`}
-                label={`Browse all ${publicRepos} repositories`}
-                variant="outline"
-                external
-              />
-            </div>
-          </div>
+          <h2
+            id="archive-heading"
+            className="mt-4 font-semibold tracking-[-0.03em] leading-[1.12] text-[clamp(1.65rem,3.3vw,2.75rem)] text-[var(--ink)]"
+          >
+            {displayName} shares {publicRepos} public repositories on GitHub, with {liveDeployments}{" "}
+            live deployments.
+          </h2>
+
+          <a
+            href={`${profileUrl}?tab=repositories`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="mt-2 inline-flex min-h-[44px] items-center gap-2 font-bold uppercase tracking-[-0.02em] leading-[1.1] text-[clamp(1.65rem,3.3vw,2.75rem)] text-[var(--accent)] hover:opacity-85 transition-opacity"
+          >
+            <span>VIEW ALL PROJECTS</span>
+            <span aria-hidden="true" className="text-[0.75em]">
+              ↗
+            </span>
+          </a>
 
           <div
             role="tablist"
-            aria-label="Filter additional projects"
-            className="mt-8 flex flex-wrap gap-2.5 pt-6 border-t border-[var(--line)]"
+            aria-label="Filter additional repositories"
+            className="mt-10 flex flex-wrap items-center gap-x-5 gap-y-2 border-t border-[var(--line)] pt-5"
           >
             {filters.map((item, index) => {
               const selected = activeFilter === item.key;
@@ -129,10 +129,10 @@ export function ProjectsShowcase({
                   aria-controls="more-projects"
                   onClick={() => setActiveFilter(item.key)}
                   onKeyDown={(e) => handleTabKeyDown(e, index)}
-                  className={`min-h-[44px] rounded-full px-4 py-2 font-mono-editorial text-[11px] uppercase tracking-[0.14em] transition-colors ${
+                  className={`min-h-[44px] inline-flex items-center px-1 font-mono-editorial text-[11px] uppercase tracking-[0.15em] border-b-2 transition-colors ${
                     selected
-                      ? "bg-[var(--ink)] text-[var(--bg)] border border-[var(--ink)] font-medium"
-                      : "bg-transparent text-[var(--ink-muted)] border border-[var(--line)] hover:border-[var(--line-strong)] hover:text-[var(--ink)]"
+                      ? "border-[var(--accent)] text-[var(--ink)] font-medium"
+                      : "border-transparent text-[var(--ink-muted)] hover:text-[var(--ink)]"
                   }`}
                 >
                   {item.label}
@@ -147,9 +147,7 @@ export function ProjectsShowcase({
         <ProjectLedger
           id="more-projects"
           sectionLabel="More Builds"
-          sectionIndex="02B / 04 · FILTERED ARCHIVE"
           projects={filteredAdditional}
-          startNumber={featuredProjects.length + 1}
           emptyMessage="No additional repositories match this filter."
           onResetFilter={() => setActiveFilter("all")}
         />

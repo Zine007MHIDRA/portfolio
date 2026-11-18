@@ -1,18 +1,11 @@
 import type { Metadata } from "next";
-import { Bebas_Neue, IBM_Plex_Mono, Plus_Jakarta_Sans } from "next/font/google";
+import { IBM_Plex_Mono, Plus_Jakarta_Sans } from "next/font/google";
 import { SmoothScrollProvider } from "@/components/SmoothScrollProvider";
 import { portfolioConfig } from "@/data/portfolio-config";
 import "./globals.css";
 
-const bebasNeue = Bebas_Neue({
-  weight: "400",
-  subsets: ["latin"],
-  variable: "--font-display",
-  display: "swap",
-});
-
 const plusJakartaSans = Plus_Jakarta_Sans({
-  weight: ["400", "500", "600"],
+  weight: ["300", "400", "500", "600", "700", "800"],
   subsets: ["latin"],
   variable: "--font-sans",
   display: "swap",
@@ -44,10 +37,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html
-      lang="en"
-      className={`${bebasNeue.variable} ${plusJakartaSans.variable} ${ibmPlexMono.variable}`}
-    >
+    <html lang="en" className={`${plusJakartaSans.variable} ${ibmPlexMono.variable}`}>
       <body>
         <a href="#main-content" className="skip-link">
           Skip to main content

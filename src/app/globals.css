@@ -4,12 +4,14 @@
   --bg: #10110f;
   --surface: #171916;
   --ink: #f3f0e8;
+  --ink-soft: #c8c5bc;
   --ink-muted: #9d9d94;
   --ink-faint: #8a8c84;
-  --line: rgba(243, 240, 232, 0.2);
-  --line-strong: rgba(243, 240, 232, 0.42);
+  --line: rgba(243, 240, 232, 0.16);
+  --line-strong: rgba(243, 240, 232, 0.38);
   --accent: #d3ff52;
-  --stroke-ink: rgba(243, 240, 232, 0.52);
+  --marquee-hover: #ff6b3d;
+  --stroke-ink: rgba(243, 240, 232, 0.56);
 }
 
 @layer base {
@@ -59,7 +61,8 @@
 }
 
 .font-display {
-  font-family: var(--font-display), Impact, sans-serif;
+  font-family: var(--font-sans), system-ui, -apple-system, sans-serif;
+  letter-spacing: -0.04em;
 }
 
 .font-mono-editorial {
@@ -160,7 +163,7 @@
 .marquee-track {
   display: flex;
   width: max-content;
-  animation: editorial-marquee 30s linear infinite;
+  animation: editorial-marquee 26s linear infinite;
   will-change: transform;
 }
 

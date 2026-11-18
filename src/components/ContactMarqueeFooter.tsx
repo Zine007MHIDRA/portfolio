@@ -6,10 +6,10 @@ import { RollingPill } from "@/components/RollingPill";
 import { useMotionPreferences } from "@/components/SmoothScrollProvider";
 
 const MARQUEE_PHRASES = [
-  { text: "LET'S TALK", stroke: false },
-  { text: "LET'S COLLABORATE", stroke: true },
-  { text: "SAY HELLO", stroke: false },
-  { text: "BUILD IN PUBLIC", stroke: true },
+  "LET'S TALK",
+  "LET'S COLLABORATE",
+  "SAY HELLO",
+  "WANNA BUILD SOMETHING?",
 ];
 
 export function ContactMarqueeFooter({
@@ -29,12 +29,11 @@ export function ContactMarqueeFooter({
       const now = new Date();
       const hh = String(now.getHours()).padStart(2, "0");
       const mm = String(now.getMinutes()).padStart(2, "0");
-      const ss = String(now.getSeconds()).padStart(2, "0");
-      setLiveClock(`${hh} : ${mm} : ${ss}`);
+      setLiveClock(`${hh} : ${mm}`);
     };
 
     formatNow();
-    const timer = window.setInterval(formatNow, 1000);
+    const timer = window.setInterval(formatNow, 15000);
     return () => window.clearInterval(timer);
   }, []);
 
@@ -46,7 +45,6 @@ export function ContactMarqueeFooter({
         setCopiedField((current) => (current === field ? null : current));
       }, 2400);
     } catch {
-      // Fallback copy for restricted browser contexts.
       const area = document.createElement("textarea");
       area.value = value;
       area.setAttribute("readonly", "");
@@ -66,72 +64,59 @@ export function ContactMarqueeFooter({
   const marqueePaused = isAmbientPaused || (prefersReducedMotion && !userEnabledMotion);
 
   return (
-    <footer id="contact" className="border-t border-[var(--line)] pt-14 sm:pt-20 pb-10">
-      <div className="mx-auto max-w-[1440px] px-4 sm:px-6 lg:px-10">
-        <div className="flex flex-wrap items-baseline justify-between gap-3">
-          <p className="font-mono-editorial text-xs uppercase tracking-[0.16em] text-[var(--accent)]">
-            CONTACT
-          </p>
-          <span className="font-mono-editorial text-[11px] uppercase tracking-[0.16em] text-[var(--ink-faint)]">
-            04 / 04 · GET IN TOUCH
-          </span>
-        </div>
-
-        <p className="mt-5 max-w-2xl text-lg sm:text-2xl leading-snug text-[var(--ink)]">
-          Have a project, role, or technical problem to build together? Reach out directly by email
-          or LinkedIn.
+    <footer id="contact" className="mx-auto max-w-[1440px] px-4 pt-12 pb-10 sm:px-6 lg:px-10">
+      <div className="border-t border-[var(--line)] pt-16 sm:pt-24 lg:pt-32">
+        <p className="max-w-lg text-2xl sm:text-[32px] font-medium leading-[1.2] tracking-[-0.02em] text-[var(--ink)]">
+          Got a question, proposal or project or want to work together on something? Feel free to
+          reach out.
         </p>
-      </div>
 
-      {/* Full-bleed infinite editorial marquee with accessible pause toggle (R-39) */}
-      <div className="mt-10 border-y border-[var(--line)] py-6 sm:py-8 overflow-x-clip">
-        <div
-          className={`marquee-track ${marqueePaused ? "is-paused" : ""} ${
-            userEnabledMotion ? "motion-user-enabled" : ""
-          }`}
-          aria-hidden="true"
+        {/* Full-bleed clickable marquee shifting cleanly to vermilion on hover/focus */}
+        <a
+          href={`mailto:${portfolioConfig.email}`}
+          aria-label={`Email ${portfolioConfig.displayName} at ${portfolioConfig.email}`}
+          className="group mt-10 block border-y border-[var(--line)] py-6 sm:py-8 overflow-x-clip text-[var(--ink-soft)] hover:text-[var(--marquee-hover)] focus-visible:text-[var(--marquee-hover)] transition-colors duration-300"
         >
-          {[0, 1].map((dupIndex) => (
-            <div key={dupIndex} className="flex shrink-0 items-center">
-              {MARQUEE_PHRASES.map((phrase) => (
-                <span
-                  key={`${dupIndex}-${phrase.text}`}
-                  className="inline-flex items-center font-display text-[clamp(3.25rem,8vw,6.75rem)] uppercase leading-none tracking-[0.02em]"
-                >
-                  <span className={phrase.stroke ? "display-stroke" : "text-[var(--ink)]"}>
-                    {phrase.text}
+          <div
+            className={`marquee-track ${marqueePaused ? "is-paused" : ""} ${
+              userEnabledMotion ? "motion-user-enabled" : ""
+            }`}
+            aria-hidden="true"
+          >
+            {[0, 1].map((dupIndex) => (
+              <div key={dupIndex} className="flex shrink-0 items-center">
+                {MARQUEE_PHRASES.map((phrase) => (
+                  <span
+                    key={`${dupIndex}-${phrase}`}
+                    className="inline-flex items-center font-display font-medium uppercase leading-none text-[clamp(3rem,7.2vw,6.25rem)]"
+                  >
+                    <span>{phrase}</span>
+                    <span className="mx-6 sm:mx-10 opacity-45">/</span>
                   </span>
-                  <span className="mx-6 sm:mx-10 text-[var(--ink-faint)]">/</span>
-                </span>
-              ))}
-            </div>
-          ))}
-        </div>
-      </div>
+                ))}
+              </div>
+            ))}
+          </div>
+        </a>
 
-      <div className="mx-auto max-w-[1440px] px-4 sm:px-6 lg:px-10">
-        {/* Interactive contact actions + explicit marquee pause control */}
-        <div className="mt-8 flex flex-wrap items-center justify-between gap-4">
-          <div className="flex flex-wrap items-center gap-3">
-            <RollingPill
+        {/* Minimalist copy-to-clipboard contact line + marquee pause toggle */}
+        <div className="mt-7 flex flex-wrap items-center justify-between gap-4">
+          <div className="flex flex-wrap items-center gap-x-8 gap-y-2">
+            <button
+              type="button"
               onClick={() => copyValue(portfolioConfig.email, "email")}
-              label={
-                copiedField === "email"
-                  ? `Copied ${portfolioConfig.email}`
-                  : `Copy ${portfolioConfig.email}`
-              }
-              variant="accent"
-            />
-            <RollingPill
-              href={`mailto:${portfolioConfig.email}`}
-              label="Send email"
-              variant="outline"
-            />
-            <RollingPill
+              className="min-h-[44px] inline-flex items-center text-xl sm:text-2xl font-medium tracking-[-0.02em] text-[var(--ink)] hover:text-[var(--accent)] transition-colors"
+            >
+              {copiedField === "email" ? `Copied ${portfolioConfig.email}` : portfolioConfig.email}
+            </button>
+
+            <button
+              type="button"
               onClick={() => copyValue(`@${login}`, "handle")}
-              label={copiedField === "handle" ? `Copied @${login}` : `Copy @${login}`}
-              variant="subtle"
-            />
+              className="min-h-[44px] inline-flex items-center font-mono-editorial text-xs uppercase tracking-[0.14em] text-[var(--ink-muted)] hover:text-[var(--ink)] transition-colors"
+            >
+              {copiedField === "handle" ? `Copied @${login}` : `Copy @${login}`}
+            </button>
           </div>
 
           <button
@@ -149,39 +134,48 @@ export function ContactMarqueeFooter({
           {copiedField === "handle" ? `Copied @${login} to clipboard.` : ""}
         </div>
 
-        {/* Footer links + live clock */}
-        <div className="mt-12 flex flex-col gap-6 border-t border-[var(--line)] pt-8 md:flex-row md:items-center md:justify-between">
-          <div className="flex flex-wrap items-center gap-2.5">
-            <RollingPill href={profileUrl} label="GITHUB" variant="outline" external />
+        {/* Compact editorial footer bar */}
+        <div className="mt-16 flex flex-col gap-6 border-t border-[var(--line)] pt-7 md:flex-row md:items-center md:justify-between">
+          <div className="flex flex-wrap items-center gap-2">
+            <RollingPill
+              href={profileUrl}
+              label="GITHUB"
+              variant="outline"
+              external
+              className="font-mono-editorial text-[11px] uppercase tracking-[0.14em] px-4"
+            />
             <RollingPill
               href={portfolioConfig.linkedinUrl}
               label="LINKEDIN"
               variant="outline"
               external
+              className="font-mono-editorial text-[11px] uppercase tracking-[0.14em] px-4"
             />
             <RollingPill
               href={`${profileUrl}?tab=repositories`}
               label="REPOSITORIES"
               variant="outline"
               external
+              className="font-mono-editorial text-[11px] uppercase tracking-[0.14em] px-4"
             />
-            <RollingPill href="#selected-work" label="SELECTED WORK" variant="subtle" />
+            <RollingPill
+              href={`mailto:${portfolioConfig.email}`}
+              label="EMAIL"
+              variant="subtle"
+              className="font-mono-editorial text-[11px] uppercase tracking-[0.14em] px-4"
+            />
           </div>
 
-          <div className="flex flex-wrap items-center gap-x-6 gap-y-2 font-mono-editorial text-[11px] uppercase tracking-[0.15em] text-[var(--ink-muted)]">
-            <span>LOCAL TIME · {liveClock}</span>
+          <div className="flex flex-wrap items-center gap-x-6 gap-y-2 font-mono-editorial text-[11px] uppercase tracking-[0.14em] text-[var(--ink-faint)]">
+            <span>LOCAL · {liveClock}</span>
             <a
               href="#top"
-              className="min-h-[44px] inline-flex items-center text-[var(--ink)] hover:text-[var(--accent)] transition-colors"
+              className="min-h-[44px] inline-flex items-center text-[var(--ink-muted)] hover:text-[var(--accent)] transition-colors"
             >
               Back to top
             </a>
+            <span>Inspired by Isaac Fayemi & Oluwadare Oluwaseyi</span>
           </div>
-        </div>
-
-        <div className="mt-6 flex flex-wrap items-center justify-between gap-3 border-t border-[var(--line)] pt-6 font-mono-editorial text-[11px] uppercase tracking-[0.14em] text-[var(--ink-faint)]">
-          <p>{portfolioConfig.displayName} · Built with Next.js, Lenis & GSAP</p>
-          <p>Editorial layout inspired by Isaac Fayemi & Oluwadare Oluwaseyi</p>
         </div>
       </div>
     </footer>
