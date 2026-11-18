@@ -1,0 +1,46 @@
+/* Option 1: Liquid Ink Sweep (feathered gradient wipe left-to-right) */
+.preview-ink-sweep {
+  background-image: linear-gradient(
+    90deg,
+    var(--accent) 0%,
+    var(--accent) 42%,
+    var(--accent-hover) 48%,
+    var(--ink) 56%,
+    var(--ink) 100%
+  );
+  background-size: 240% 100%;
+  background-position: 100% 0%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  transition: background-position var(--preview-speed, 620ms) cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.group:hover .preview-ink-sweep,
+.preview-ink-sweep:focus-visible {
+  background-position: 0% 0%;
+}
+
+/* Option 2: Warm Silk Bloom (uniform decelerated fade on full row hover) */
+.preview-silk-bloom {
+  color: var(--ink);
+  transition: color var(--preview-speed, 700ms) cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.group:hover .preview-silk-bloom,
+.preview-silk-bloom:focus-visible {
+  color: var(--accent);
+}
+
+/* Option 3: Letter-by-Letter Wave (staggered per-character cascade) */
+.preview-char {
+  display: inline-block;
+  color: var(--ink);
+  transition: color 420ms cubic-bezier(0.22, 1, 0.36, 1);
+  transition-delay: calc(var(--char-index, 0) * var(--char-step, 18ms));
+}
+
+.group:hover .preview-char,
+.preview-wave-link:focus-visible .preview-char {
+  color: var(--accent);
+}

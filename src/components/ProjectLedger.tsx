@@ -40,13 +40,16 @@ export function ProjectLedger({
     const ctx = gsap.context(() => {
       const titles = gsap.utils.toArray<HTMLElement>("[data-parallax-title]");
       titles.forEach((el, index) => {
-        const direction = index % 2 === 0 ? 1 : -1;
-        // Translate by viewport width so short titles like NOIR and FLOW glide as dramatically as long ones.
+        const isEven = index % 2 === 0;
+        // Keep horizontal translation non-negative so leading characters never clip past the left margin.
+        const startX = isEven ? 0 : () => window.innerWidth * 0.16;
+        const endX = isEven ? () => window.innerWidth * 0.16 : 0;
+
         gsap.fromTo(
           el,
-          { x: () => -window.innerWidth * 0.1 * direction },
+          { x: startX },
           {
-            x: () => window.innerWidth * 0.22 * direction,
+            x: endX,
             ease: "none",
             scrollTrigger: {
               trigger: el.closest("article") ?? el,
@@ -123,15 +126,15 @@ export function ProjectLedger({
                     )}
                   </div>
 
-                  {/* Gliding poster headline clipped locally so desktop scrub never causes horizontal overflow */}
-                  <div className="my-5 sm:my-7 overflow-x-clip">
+                  {/* Gliding poster headline clipped locally with safety padding so desktop scrub never clips leading letters */}
+                  <div className="my-5 sm:my-7 overflow-x-clip px-1 sm:px-2">
                     <h3 className="font-display font-bold uppercase leading-[0.94] text-[clamp(2.45rem,8.4vw,6.85rem)]">
                       <a
                         href={project.repoUrl}
                         target="_blank"
                         rel="noopener noreferrer"
                         data-parallax-title
-                        className="inline-block lg:whitespace-nowrap text-[var(--ink)] transition-colors duration-200 hover:text-[var(--accent)] focus-visible:text-[var(--accent)]"
+                        className="editorial-ink-sweep inline-block lg:whitespace-nowrap"
                       >
                         {titleText}
                       </a>
