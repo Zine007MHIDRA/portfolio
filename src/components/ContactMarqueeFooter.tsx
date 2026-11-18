@@ -153,7 +153,6 @@ export function ContactMarqueeFooter({
             >
               Back to top
             </a>
-            <span>Inspired by Isaac Fayemi & Oluwadare Oluwaseyi</span>
           </div>
         </div>
       </div>

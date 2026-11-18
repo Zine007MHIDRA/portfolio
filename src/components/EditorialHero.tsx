@@ -64,7 +64,7 @@ export function EditorialHero({
           {hasHeroVideo && portfolioConfig.heroVideo ? (
             <video
               ref={videoRef}
-              className="h-full w-full object-cover opacity-55"
+              className="h-full w-full object-cover opacity-75"
               autoPlay
               loop
               muted
@@ -85,25 +85,25 @@ export function EditorialHero({
               height={900}
               fetchPriority="high"
               decoding="async"
-              className="h-full w-full object-cover object-right opacity-65 hero-media-drift"
+              className="h-full w-full object-cover object-right opacity-75 hero-media-drift"
             />
           ) : (
             <div className="h-full w-full bg-[var(--surface)]" />
           )}
 
-          {/* Directional scrim guarantees WCAG AA contrast over every pixel behind text (R-25). */}
+          {/* Directional scrim guarantees WCAG AA contrast over left-side text while keeping right-side video vivid. */}
           <div
             className="absolute inset-0"
             style={{
               background:
-                "linear-gradient(90deg, rgba(16,17,15,0.96) 0%, rgba(16,17,15,0.84) 44%, rgba(16,17,15,0.34) 78%, rgba(16,17,15,0.58) 100%)",
+                "linear-gradient(90deg, rgba(16,17,15,0.95) 0%, rgba(16,17,15,0.78) 38%, rgba(16,17,15,0.18) 72%, rgba(16,17,15,0.34) 100%)",
             }}
           />
           <div
             className="absolute inset-0"
             style={{
               background:
-                "linear-gradient(180deg, rgba(16,17,15,0.52) 0%, rgba(16,17,15,0.12) 45%, rgba(16,17,15,0.92) 100%)",
+                "linear-gradient(180deg, rgba(16,17,15,0.42) 0%, rgba(16,17,15,0.08) 45%, rgba(16,17,15,0.88) 100%)",
             }}
           />
         </div>

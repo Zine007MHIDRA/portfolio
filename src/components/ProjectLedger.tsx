@@ -32,8 +32,8 @@ export function ProjectLedger({
   useEffect(() => {
     if (!containerRef.current) return;
 
-    const isDesktop = window.matchMedia("(min-width: 1024px)").matches;
-    if (!isDesktop) return;
+    const isWideEnough = window.matchMedia("(min-width: 640px)").matches;
+    if (!isWideEnough) return;
 
     gsap.registerPlugin(ScrollTrigger);
 
@@ -41,22 +41,26 @@ export function ProjectLedger({
       const titles = gsap.utils.toArray<HTMLElement>("[data-parallax-title]");
       titles.forEach((el, index) => {
         const direction = index % 2 === 0 ? 1 : -1;
+        // Translate by viewport width so short titles like NOIR and FLOW glide as dramatically as long ones.
         gsap.fromTo(
           el,
-          { xPercent: -12 * direction },
+          { x: () => -window.innerWidth * 0.1 * direction },
           {
-            xPercent: 14 * direction,
+            x: () => window.innerWidth * 0.22 * direction,
             ease: "none",
             scrollTrigger: {
               trigger: el.closest("article") ?? el,
               start: "top bottom",
               end: "bottom top",
-              scrub: 0.55,
+              scrub: 0.45,
+              invalidateOnRefresh: true,
             },
           }
         );
       });
     }, containerRef);
+
+    ScrollTrigger.refresh();
 
     return () => ctx.revert();
   }, [projects]);
