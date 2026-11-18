@@ -33,6 +33,9 @@ export function EditorialHero({
     const section = sectionRef.current;
     if (!video || !section) return;
 
+    video.muted = true;
+    video.play().catch(() => {});
+
     const observer = new IntersectionObserver(
       (entries) => {
         const isVisible = entries[0]?.isIntersecting;
@@ -58,7 +61,7 @@ export function EditorialHero({
     >
       <div className="relative overflow-hidden border border-[var(--line)] bg-[var(--surface)]">
         <div className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden="true">
-          {hasHeroVideo ? (
+          {hasHeroVideo && portfolioConfig.heroVideo ? (
             <video
               ref={videoRef}
               className="h-full w-full object-cover opacity-55"
@@ -66,16 +69,17 @@ export function EditorialHero({
               loop
               muted
               playsInline
+              preload="auto"
               width={1600}
               height={900}
-              poster={hasHeroPoster ? "/media/hero-poster.jpg" : undefined}
+              poster={hasHeroPoster && portfolioConfig.heroPoster ? portfolioConfig.heroPoster : undefined}
             >
-              <source src="/media/hero.mp4" type="video/mp4" />
+              <source src={portfolioConfig.heroVideo} type="video/mp4" />
             </video>
-          ) : hasHeroPoster ? (
+          ) : hasHeroPoster && portfolioConfig.heroPoster ? (
             // eslint-disable-next-line @next/next/no-img-element
             <img
-              src="/media/hero-poster.jpg"
+              src={portfolioConfig.heroPoster}
               alt=""
               width={1600}
               height={900}

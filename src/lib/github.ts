@@ -1,5 +1,3 @@
-import fs from "node:fs";
-import path from "node:path";
 import { portfolioConfig } from "@/data/portfolio-config";
 import {
   fallbackRepos,
@@ -204,11 +202,9 @@ export async function getPortfolioData(): Promise<PortfolioData> {
     .sort((a, b) => b.stars - a.stars || Number(Boolean(b.liveUrl)) - Number(Boolean(a.liveUrl)))
     .slice(0, 6);
 
-  const mediaDir = path.join(process.cwd(), "public", "media");
-  const hasHeroVideo = fs.existsSync(path.join(mediaDir, "hero.mp4"));
-  const hasHeroPoster =
-    fs.existsSync(path.join(mediaDir, "hero-poster.jpg")) ||
-    fs.existsSync(path.join(mediaDir, "hero-poster.png"));
+  // Use explicit config paths rather than fs.existsSync so Vercel ISR revalidations keep hero.mp4 active.
+  const hasHeroVideo = Boolean(portfolioConfig.heroVideo);
+  const hasHeroPoster = Boolean(portfolioConfig.heroPoster);
 
   return {
     source,

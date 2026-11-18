@@ -18,6 +18,8 @@ export interface PortfolioConfig {
   email: string;
   githubUrl: string;
   linkedinUrl: string;
+  heroVideo: string | null;
+  heroPoster: string | null;
   featuredOrder: string[];
   secondaryOrder: string[];
   hiddenRepos: string[];
@@ -38,6 +40,8 @@ export const portfolioConfig: PortfolioConfig = {
   email: "zine.mhidra@gmail.com",
   githubUrl: "https://github.com/Zine007MHIDRA",
   linkedinUrl: "https://www.linkedin.com/in/zine-el-abidine-mhidra-bbb805374/",
+  heroVideo: "/media/hero.mp4",
+  heroPoster: "/media/hero-poster.jpg",
   featuredOrder: ["F1LapStratSim", "HoneyGrid", "aether-audiophile", "Noir"],
   secondaryOrder: [
     "Ecom",
