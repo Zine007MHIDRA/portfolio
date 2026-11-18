@@ -214,7 +214,7 @@ export async function getPortfolioData(): Promise<PortfolioData> {
     profile: {
       login: user.login,
       name: user.name?.trim() || portfolioConfig.displayName,
-      bio: user.bio?.trim() || portfolioConfig.tagline,
+      bio: portfolioConfig.tagline || user.bio?.trim() || "",
       publicRepos: user.public_repos,
       followers: user.followers,
       following: user.following,
