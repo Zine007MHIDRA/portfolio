@@ -18,7 +18,6 @@ export function ContactMarqueeFooter({
   login: string;
   profileUrl: string;
 }) {
-  const [marqueePaused, setMarqueePaused] = useState(false);
   const [copiedField, setCopiedField] = useState<"email" | "handle" | null>(null);
   const [liveClock, setLiveClock] = useState<string>("-- : --");
 
@@ -73,7 +72,7 @@ export function ContactMarqueeFooter({
           aria-label={`Email ${portfolioConfig.displayName} at ${portfolioConfig.email}`}
           className="group mt-10 block border-y border-[var(--line)] py-6 sm:py-8 overflow-x-clip text-[var(--ink-soft)] hover:text-[var(--marquee-hover)] focus-visible:text-[var(--marquee-hover)] transition-colors duration-300"
         >
-          <div className={`marquee-track ${marqueePaused ? "is-paused" : ""}`} aria-hidden="true">
+          <div className="marquee-track" aria-hidden="true">
             {[0, 1].map((dupIndex) => (
               <div key={dupIndex} className="flex shrink-0 items-center">
                 {MARQUEE_PHRASES.map((phrase) => (
@@ -90,33 +89,22 @@ export function ContactMarqueeFooter({
           </div>
         </a>
 
-        {/* Minimalist copy-to-clipboard contact line + marquee pause toggle */}
-        <div className="mt-7 flex flex-wrap items-center justify-between gap-4">
-          <div className="flex flex-wrap items-center gap-x-8 gap-y-2">
-            <button
-              type="button"
-              onClick={() => copyValue(portfolioConfig.email, "email")}
-              className="min-h-[44px] inline-flex items-center text-xl sm:text-2xl font-medium tracking-[-0.02em] text-[var(--ink)] hover:text-[var(--accent)] transition-colors"
-            >
-              {copiedField === "email" ? `Copied ${portfolioConfig.email}` : portfolioConfig.email}
-            </button>
-
-            <button
-              type="button"
-              onClick={() => copyValue(`@${login}`, "handle")}
-              className="min-h-[44px] inline-flex items-center font-mono-editorial text-xs uppercase tracking-[0.14em] text-[var(--ink-muted)] hover:text-[var(--ink)] transition-colors"
-            >
-              {copiedField === "handle" ? `Copied @${login}` : `Copy @${login}`}
-            </button>
-          </div>
+        {/* Minimalist copy-to-clipboard contact line */}
+        <div className="mt-7 flex flex-wrap items-center gap-x-8 gap-y-2">
+          <button
+            type="button"
+            onClick={() => copyValue(portfolioConfig.email, "email")}
+            className="min-h-[44px] inline-flex items-center text-xl sm:text-2xl font-medium tracking-[-0.02em] text-[var(--ink)] hover:text-[var(--accent)] transition-colors"
+          >
+            {copiedField === "email" ? `Copied ${portfolioConfig.email}` : portfolioConfig.email}
+          </button>
 
           <button
             type="button"
-            onClick={() => setMarqueePaused((prev) => !prev)}
-            aria-pressed={marqueePaused}
-            className="min-h-[44px] rounded-full border border-[var(--line)] px-4 font-mono-editorial text-[11px] uppercase tracking-[0.14em] text-[var(--ink-muted)] hover:border-[var(--line-strong)] hover:text-[var(--ink)] transition-colors"
+            onClick={() => copyValue(`@${login}`, "handle")}
+            className="min-h-[44px] inline-flex items-center font-mono-editorial text-xs uppercase tracking-[0.14em] text-[var(--ink-muted)] hover:text-[var(--ink)] transition-colors"
           >
-            {marqueePaused ? "Play marquee" : "Pause marquee"}
+            {copiedField === "handle" ? `Copied @${login}` : `Copy @${login}`}
           </button>
         </div>
 

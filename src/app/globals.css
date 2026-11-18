@@ -167,10 +167,6 @@
   will-change: transform;
 }
 
-.marquee-track.is-paused {
-  animation-play-state: paused;
-}
-
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
