@@ -146,10 +146,6 @@
   will-change: transform;
 }
 
-.hero-media-drift.is-paused {
-  animation-play-state: paused;
-}
-
 /* Seamless contact marquee loop. */
 @keyframes editorial-marquee {
   0% {
@@ -165,29 +161,4 @@
   width: max-content;
   animation: editorial-marquee 22s linear infinite;
   will-change: transform;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  html {
-    scroll-behavior: auto;
-  }
-
-  .hero-media-drift:not(.motion-user-enabled) {
-    animation: none;
-    transform: none;
-  }
-
-  .roll-label > span {
-    transition: none;
-  }
-
-  .roll-trigger:hover .roll-label > span:first-child,
-  .roll-trigger:focus-visible .roll-label > span:first-child {
-    transform: none;
-  }
-
-  .roll-trigger:hover .roll-label > span:last-child,
-  .roll-trigger:focus-visible .roll-label > span:last-child {
-    transform: translateY(115%);
-  }
 }

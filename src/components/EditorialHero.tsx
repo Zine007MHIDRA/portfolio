@@ -3,7 +3,6 @@
 import { useEffect, useRef } from "react";
 import { portfolioConfig } from "@/data/portfolio-config";
 import { RollingPill } from "@/components/RollingPill";
-import { useMotionPreferences } from "@/components/SmoothScrollProvider";
 
 interface EditorialHeroProps {
   login: string;
@@ -26,8 +25,6 @@ export function EditorialHero({
   hasHeroPoster,
   source,
 }: EditorialHeroProps) {
-  const { isAmbientPaused, userEnabledMotion, toggleAmbientMotion, prefersReducedMotion } =
-    useMotionPreferences();
   const videoRef = useRef<HTMLVideoElement>(null);
   const sectionRef = useRef<HTMLElement>(null);
 
@@ -36,15 +33,10 @@ export function EditorialHero({
     const section = sectionRef.current;
     if (!video || !section) return;
 
-    if (isAmbientPaused || (prefersReducedMotion && !userEnabledMotion)) {
-      video.pause();
-      return;
-    }
-
     const observer = new IntersectionObserver(
       (entries) => {
         const isVisible = entries[0]?.isIntersecting;
-        if (isVisible && !isAmbientPaused) {
+        if (isVisible) {
           video.play().catch(() => {});
         } else {
           video.pause();
@@ -55,7 +47,7 @@ export function EditorialHero({
 
     observer.observe(section);
     return () => observer.disconnect();
-  }, [isAmbientPaused, prefersReducedMotion, userEnabledMotion]);
+  }, []);
 
   return (
     <section
@@ -70,7 +62,7 @@ export function EditorialHero({
             <video
               ref={videoRef}
               className="h-full w-full object-cover opacity-55"
-              autoPlay={!prefersReducedMotion && !isAmbientPaused}
+              autoPlay
               loop
               muted
               playsInline
@@ -89,9 +81,7 @@ export function EditorialHero({
               height={900}
               fetchPriority="high"
               decoding="async"
-              className={`h-full w-full object-cover object-right opacity-65 hero-media-drift ${
-                isAmbientPaused ? "is-paused" : ""
-              } ${userEnabledMotion ? "motion-user-enabled" : ""}`}
+              className="h-full w-full object-cover object-right opacity-65 hero-media-drift"
             />
           ) : (
             <div className="h-full w-full bg-[var(--surface)]" />
@@ -170,24 +160,12 @@ export function EditorialHero({
             Built from public work · {publicRepos} repositories · {liveDeployments} live
           </p>
 
-          <div className="flex items-center gap-4">
-            {(hasHeroVideo || hasHeroPoster) && (
-              <button
-                type="button"
-                onClick={toggleAmbientMotion}
-                aria-pressed={isAmbientPaused}
-                className="min-h-[44px] inline-flex items-center px-2 font-mono-editorial text-[11px] uppercase tracking-[0.14em] text-[var(--ink-muted)] hover:text-[var(--ink)] transition-colors"
-              >
-                {isAmbientPaused ? "Resume motion" : "Pause motion"}
-              </button>
-            )}
-            <a
-              href="#selected-work"
-              className="min-h-[44px] inline-flex items-center font-mono-editorial text-[11px] uppercase tracking-[0.14em] text-[var(--ink-muted)] hover:text-[var(--accent)] transition-colors"
-            >
-              Scroll to explore
-            </a>
-          </div>
+          <a
+            href="#selected-work"
+            className="min-h-[44px] inline-flex items-center font-mono-editorial text-[11px] uppercase tracking-[0.14em] text-[var(--ink-muted)] hover:text-[var(--accent)] transition-colors"
+          >
+            Scroll to explore
+          </a>
         </div>
       </div>
     </section>

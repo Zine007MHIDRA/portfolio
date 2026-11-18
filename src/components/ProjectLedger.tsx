@@ -5,7 +5,6 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import type { PortfolioProject } from "@/lib/github";
 import { RollingPill } from "@/components/RollingPill";
-import { useMotionPreferences } from "@/components/SmoothScrollProvider";
 
 interface ProjectLedgerProps {
   id?: string;
@@ -29,11 +28,9 @@ export function ProjectLedger({
   onResetFilter,
 }: ProjectLedgerProps) {
   const containerRef = useRef<HTMLDivElement>(null);
-  const { prefersReducedMotion, isAmbientPaused, userEnabledMotion } = useMotionPreferences();
 
   useEffect(() => {
-    const motionBlocked = isAmbientPaused || (prefersReducedMotion && !userEnabledMotion);
-    if (motionBlocked || !containerRef.current) return;
+    if (!containerRef.current) return;
 
     const isDesktop = window.matchMedia("(min-width: 1024px)").matches;
     if (!isDesktop) return;
@@ -62,7 +59,7 @@ export function ProjectLedger({
     }, containerRef);
 
     return () => ctx.revert();
-  }, [projects, prefersReducedMotion, isAmbientPaused, userEnabledMotion]);
+  }, [projects]);
 
   return (
     <section
