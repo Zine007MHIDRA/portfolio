@@ -29,7 +29,7 @@ export type RollingPillProps = LinkPillProps | ButtonPillProps;
 
 const variantClasses: Record<PillVariant, string> = {
   accent:
-    "bg-[var(--accent)] text-[var(--bg)] border border-[var(--accent)] font-medium hover:bg-[#e1ff85] active:scale-[0.98]",
+    "bg-[var(--accent)] text-[var(--bg)] border border-[var(--accent)] font-medium hover:bg-[var(--accent-hover)] hover:border-[var(--accent-hover)] active:scale-[0.98]",
   outline:
     "bg-transparent text-[var(--ink)] border border-[var(--line-strong)] hover:border-[var(--ink)] hover:bg-[rgba(243,240,232,0.06)] active:scale-[0.98]",
   subtle:

@@ -9,8 +9,9 @@
   --ink-faint: #8a8c84;
   --line: rgba(243, 240, 232, 0.16);
   --line-strong: rgba(243, 240, 232, 0.38);
-  --accent: #d3ff52;
-  --marquee-hover: #ff6b3d;
+  --accent: #ff6b3d;
+  --accent-hover: #ff8761;
+  --marquee-hover: #ffd166;
   --stroke-ink: rgba(243, 240, 232, 0.56);
 }
 

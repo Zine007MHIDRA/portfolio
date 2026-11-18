@@ -66,7 +66,7 @@ export function ContactMarqueeFooter({
           reach out.
         </p>
 
-        {/* Full-bleed clickable marquee shifting cleanly to vermilion on hover/focus */}
+        {/* Full-bleed clickable marquee shifting cleanly to warm amber on hover/focus */}
         <a
           href={`mailto:${portfolioConfig.email}`}
           aria-label={`Email ${portfolioConfig.displayName} at ${portfolioConfig.email}`}
