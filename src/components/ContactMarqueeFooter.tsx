@@ -3,7 +3,6 @@
 import { useCallback, useEffect, useState } from "react";
 import { portfolioConfig } from "@/data/portfolio-config";
 import { RollingPill } from "@/components/RollingPill";
-import { useMotionPreferences } from "@/components/SmoothScrollProvider";
 
 const MARQUEE_PHRASES = [
   "LET'S TALK",
@@ -19,8 +18,7 @@ export function ContactMarqueeFooter({
   login: string;
   profileUrl: string;
 }) {
-  const { prefersReducedMotion, isAmbientPaused, userEnabledMotion, toggleAmbientMotion } =
-    useMotionPreferences();
+  const [marqueePaused, setMarqueePaused] = useState(false);
   const [copiedField, setCopiedField] = useState<"email" | "handle" | null>(null);
   const [liveClock, setLiveClock] = useState<string>("-- : --");
 
@@ -61,8 +59,6 @@ export function ContactMarqueeFooter({
     }
   }, []);
 
-  const marqueePaused = isAmbientPaused || (prefersReducedMotion && !userEnabledMotion);
-
   return (
     <footer id="contact" className="mx-auto max-w-[1440px] px-4 pt-12 pb-10 sm:px-6 lg:px-10">
       <div className="border-t border-[var(--line)] pt-16 sm:pt-24 lg:pt-32">
@@ -77,12 +73,7 @@ export function ContactMarqueeFooter({
           aria-label={`Email ${portfolioConfig.displayName} at ${portfolioConfig.email}`}
           className="group mt-10 block border-y border-[var(--line)] py-6 sm:py-8 overflow-x-clip text-[var(--ink-soft)] hover:text-[var(--marquee-hover)] focus-visible:text-[var(--marquee-hover)] transition-colors duration-300"
         >
-          <div
-            className={`marquee-track ${marqueePaused ? "is-paused" : ""} ${
-              userEnabledMotion ? "motion-user-enabled" : ""
-            }`}
-            aria-hidden="true"
-          >
+          <div className={`marquee-track ${marqueePaused ? "is-paused" : ""}`} aria-hidden="true">
             {[0, 1].map((dupIndex) => (
               <div key={dupIndex} className="flex shrink-0 items-center">
                 {MARQUEE_PHRASES.map((phrase) => (
@@ -121,7 +112,7 @@ export function ContactMarqueeFooter({
 
           <button
             type="button"
-            onClick={toggleAmbientMotion}
+            onClick={() => setMarqueePaused((prev) => !prev)}
             aria-pressed={marqueePaused}
             className="min-h-[44px] rounded-full border border-[var(--line)] px-4 font-mono-editorial text-[11px] uppercase tracking-[0.14em] text-[var(--ink-muted)] hover:border-[var(--line-strong)] hover:text-[var(--ink)] transition-colors"
           >

@@ -163,7 +163,7 @@
 .marquee-track {
   display: flex;
   width: max-content;
-  animation: editorial-marquee 26s linear infinite;
+  animation: editorial-marquee 22s linear infinite;
   will-change: transform;
 }
 
@@ -176,8 +176,7 @@
     scroll-behavior: auto;
   }
 
-  .hero-media-drift:not(.motion-user-enabled),
-  .marquee-track:not(.motion-user-enabled) {
+  .hero-media-drift:not(.motion-user-enabled) {
     animation: none;
     transform: none;
   }
