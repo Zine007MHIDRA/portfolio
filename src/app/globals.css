@@ -1,0 +1,195 @@
+@import "tailwindcss";
+
+:root {
+  --bg: #10110f;
+  --surface: #171916;
+  --ink: #f3f0e8;
+  --ink-muted: #9d9d94;
+  --ink-faint: #8a8c84;
+  --line: rgba(243, 240, 232, 0.2);
+  --line-strong: rgba(243, 240, 232, 0.42);
+  --accent: #d3ff52;
+  --stroke-ink: rgba(243, 240, 232, 0.52);
+}
+
+@layer base {
+  html {
+    background-color: var(--bg);
+    color: var(--ink);
+    font-family: var(--font-sans), system-ui, -apple-system, sans-serif;
+    scroll-behavior: smooth;
+    scroll-padding-top: 88px;
+  }
+
+  body {
+    background-color: var(--bg);
+    color: var(--ink);
+    overflow-x: clip;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  /* Base-layer interactive cursor affordance (R-39). */
+  a[href],
+  button,
+  summary,
+  select,
+  label[for],
+  [role="button"],
+  [role="link"],
+  [role="tab"] {
+    cursor: pointer;
+  }
+
+  :disabled,
+  [aria-disabled="true"] {
+    cursor: not-allowed;
+  }
+
+  /* High-contrast keyboard focus ring (R-32). */
+  :focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
+  }
+
+  ::selection {
+    background-color: var(--accent);
+    color: var(--bg);
+  }
+}
+
+.font-display {
+  font-family: var(--font-display), Impact, sans-serif;
+}
+
+.font-mono-editorial {
+  font-family: var(--font-mono), ui-monospace, SFMono-Regular, monospace;
+}
+
+.skip-link {
+  position: fixed;
+  top: -100px;
+  left: 1rem;
+  z-index: 100;
+  background-color: var(--accent);
+  color: var(--bg);
+  padding: 0.75rem 1.25rem;
+  border-radius: 9999px;
+  font-family: var(--font-mono), monospace;
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  transition: top 160ms ease;
+}
+
+.skip-link:focus {
+  top: 1rem;
+}
+
+.display-stroke {
+  color: transparent;
+  -webkit-text-stroke: 1.5px var(--stroke-ink);
+}
+
+@media (max-width: 639px) {
+  .display-stroke {
+    -webkit-text-stroke: 1.15px var(--stroke-ink);
+  }
+}
+
+/* Dual-span vertical rolling hover inside capsule controls. */
+.roll-label {
+  position: relative;
+  display: inline-grid;
+  overflow: hidden;
+  line-height: 1.15;
+}
+
+.roll-label > span {
+  grid-area: 1 / 1;
+  transition: transform 320ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.roll-label > span:last-child {
+  transform: translateY(115%);
+}
+
+.roll-trigger:hover .roll-label > span:first-child,
+.roll-trigger:focus-visible .roll-label > span:first-child {
+  transform: translateY(-115%);
+}
+
+.roll-trigger:hover .roll-label > span:last-child,
+.roll-trigger:focus-visible .roll-label > span:last-child {
+  transform: translateY(0%);
+}
+
+/* Slow ambient drift on hero architectural visual, gated by pause and reduced motion. */
+@keyframes hero-drift {
+  0% {
+    transform: scale(1.03) translate3d(0, 0, 0);
+  }
+  50% {
+    transform: scale(1.08) translate3d(-1.2%, -0.8%, 0);
+  }
+  100% {
+    transform: scale(1.03) translate3d(0, 0, 0);
+  }
+}
+
+.hero-media-drift {
+  animation: hero-drift 28s ease-in-out infinite;
+  will-change: transform;
+}
+
+.hero-media-drift.is-paused {
+  animation-play-state: paused;
+}
+
+/* Seamless contact marquee loop. */
+@keyframes editorial-marquee {
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+  100% {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+.marquee-track {
+  display: flex;
+  width: max-content;
+  animation: editorial-marquee 30s linear infinite;
+  will-change: transform;
+}
+
+.marquee-track.is-paused {
+  animation-play-state: paused;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  .hero-media-drift:not(.motion-user-enabled),
+  .marquee-track:not(.motion-user-enabled) {
+    animation: none;
+    transform: none;
+  }
+
+  .roll-label > span {
+    transition: none;
+  }
+
+  .roll-trigger:hover .roll-label > span:first-child,
+  .roll-trigger:focus-visible .roll-label > span:first-child {
+    transform: none;
+  }
+
+  .roll-trigger:hover .roll-label > span:last-child,
+  .roll-trigger:focus-visible .roll-label > span:last-child {
+    transform: translateY(115%);
+  }
+}
